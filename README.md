@@ -1,56 +1,62 @@
-# Welcome to your Expo app 👋
+# Цифровой контроль гибки труб
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Монорепозиторий ВКР «Разработка информационной системы цифрового контроля процесса изготовления отводов холодного гнутья».
 
-## Get started
+Один репозиторий содержит приложение руководителя для Windows, приложение машиниста для Android и общие материалы разработки.
 
-1. Install dependencies
+## Карта проекта
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+pipe-bending-mobile/             ← корень монорепозитория, один .git
+├── apps/
+│   ├── mobile/                 ← Android: React Native + Expo
+│   │   ├── src/app/            ← экраны и навигация Expo Router
+│   │   ├── src/components/     ← переиспользуемые мобильные компоненты
+│   │   ├── src/features/       ← задания, сеансы, архив
+│   │   ├── src/services/       ← источники показаний, сначала симулятор
+│   │   ├── src/storage/        ← SQLite и миграции планшета
+│   │   ├── src/exchange/       ← выбор файлов, импорт и экспорт на Android
+│   │   ├── src/reports/        ← формирование протокола на планшете
+│   │   ├── assets/             ← изображения и другие ресурсы
+│   │   ├── package.json
+│   │   └── package-lock.json   ← сохранённый lock-файл мобильного приложения
+│   └── desktop/                ← Windows: Wails + React + Go
+│       ├── frontend/src/       ← интерфейс React
+│       └── internal/           ← Go: SQLite и файловый обмен
+├── packages/
+│   ├── domain/src/             ← будущие общие предметные типы и правила
+│   └── contracts/src/          ← будущие форматы задания/результата и проверки
+├── examples/                   ← только вымышленные задания, результаты, конфигурации
+├── docs/                       ← контекст, архитектура, решения и проверки
+├── tests/integration/          ← будущие проверки обмена между приложениями
+├── scripts/                    ← будущие вспомогательные команды
+├── local-data/                 ← локальные материалы, содержимое исключено из Git
+└── package.json                ← удобные команды из корня
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Подробное объяснение папок и порядок разработки: [REPOSITORY_STRUCTURE.md](docs/REPOSITORY_STRUCTURE.md).
 
-### Other setup steps
+## Запуск мобильного приложения
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+В терминале перейдите в корень и запустите:
 
-## Learn more
+```bash
+cd /Users/vikdays/Documents/devtools/projects/pipe-bending-mobile
+npm run mobile:start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm run mobile:start -- --clear
+```
 
-## Join the community
+Альтернативный запуск непосредственно из мобильной папки:
 
-Join our community of developers creating universal apps.
+```bash
+cd /Users/vikdays/Documents/devtools/projects/pipe-bending-mobile/apps/mobile
+npx expo start --go
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+На этом Mac зависимости перенесены вместе с приложением. После первого клонирования на другом компьютере установите их из сохранённого lock-файла:
+
+```bash

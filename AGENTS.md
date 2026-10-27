@@ -1,41 +1,23 @@
-This is an Expo/React Native mobile application. Prioritize mobile-first patterns, performance, and cross-platform compatibility.
+# Repository instructions
 
-## Expo has changed — do not trust your training data
+This is a monorepo for an offline pipe bending control prototype.
 
-Expo ships breaking changes every SDK release. APIs you remember are likely renamed, moved, or removed. Before writing any code that touches an Expo, EAS, or React Native API:
+- `apps/mobile`: existing React Native + TypeScript + Expo application. Read `apps/mobile/AGENTS.md` before changing it. Resolve its package versions, assets and Expo commands from that directory.
+- `apps/desktop`: future Windows Wails + Go application with a React + TypeScript frontend. Currently a directory scaffold, not an initialized Wails project.
+- `packages/domain` and `packages/contracts`: future platform-independent TypeScript code, not yet configured as npm packages.
+- `docs`: requirements, design decisions and development instructions.
+- `examples`: fictional data only.
 
-1. Read the major version of the `expo` package in `package.json`.
-2. Fetch the matching versioned docs: `https://docs.expo.dev/versions/v<major>.0.0/`
-3. For anything else, fetch https://docs.expo.dev/llms.txt — an index of all Expo docs with corrections to common LLM misconceptions. Follow its links to the specific page you need; never answer from memory.
+Preserve the existing root Git history. Do not create nested `.git` directories or generate a new mobile project over the existing code.
 
-## Commands
+There is no npm workspace setup yet. Each application keeps its own dependency installation and lock-file. The root package only forwards commands.
 
-Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
+Run `npm run typecheck` and `npm run lint` from the root before declaring work done. Report missing tooling honestly. Do not install dependencies after a denied installation request without renewed authorization.
 
-```bash
-npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
-npx expo start              # start the dev server
-npx expo lint               # lint
-npx tsc --noEmit            # typecheck
-npx expo-doctor             # diagnose dependency and config issues
-npx expo install --fix      # fix incompatible package versions
-```
+Keep Expo Router routes in `apps/mobile/src/app`; components, hooks and application logic belong outside the route directory. Follow the versioned Expo documentation requirements in the mobile instructions. Do not manually create generated `apps/mobile/ios` or `apps/mobile/android` directories.
 
-Run lint and typecheck before declaring any task done.
+Each device owns its SQLite database. Exchange versioned task/result files and snapshots, never replace a device database with the other device's database. Resume the same session and repeat measurements within the same physical bend. Only explicitly confirmed measurements enter the protocol.
 
-## Navigation & Routing
+Start with a simulator. Do not invent sensor transports, production formulas, tolerances, operating modes or the method for obtaining H. The application does not control the machine. Windows and Android are prototype targets; RED OS is future work.
 
-- Use **Expo Router** for all navigation. Routes live in `src/app/` — every file there is a screen, `_layout.tsx` files define navigators. Keep non-route code (components, hooks, utils) outside `src/app/`.
-- Import `Link`, `router`, and `useLocalSearchParams` from `expo-router`.
-- Docs: https://docs.expo.dev/router/introduction.md
-
-## Building with EAS
-
-Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.
-Docs: https://docs.expo.dev/eas/index.md
-
-## Rules
-
-- If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
-- Expo Go only includes its bundled native modules. After adding a library with native code, the app needs a development build: `npx expo run:ios|android` locally, or `eas build --profile development`.
-- Prefer recommended Expo modules over third-party libraries, and check your available skills before adding dependencies. Docs: https://docs.expo.dev/versions/latest/index.md
+Keep real production documents and runtime data outside tracked source, such as in `local-data`. Do not upload them to GitHub. Empty scaffold directories use `.gitkeep`; remove the marker when adding real code if convenient.

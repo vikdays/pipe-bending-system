@@ -31,7 +31,9 @@ yarn-error.*
 *.pem
 
 # local env files
-.env*.local
+.env
+.env.*
+!.env.example
 
 # typescript
 *.tsbuildinfo
@@ -41,3 +43,27 @@ example
 # generated native folders
 /ios
 /android
+/apps/mobile/ios/
+/apps/mobile/android/
+
+# desktop generated bindings and compiled binaries
+/apps/desktop/build/bin/
+/apps/desktop/frontend/wailsjs/
+
+# runtime databases (device-specific, never source files)
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+
+# installation packages and signing material
+*.apk
+*.aab
+*.exe
+*.msi
+*.keystore
+
+# lint cache
+.eslintcache
