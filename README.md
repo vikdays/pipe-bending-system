@@ -34,11 +34,7 @@ pipe-bending-mobile/             ← корень монорепозитория
 └── package.json                ← удобные команды из корня
 ```
 
-Подробное объяснение папок и порядок разработки: [REPOSITORY_STRUCTURE.md](docs/REPOSITORY_STRUCTURE.md).
-
 ## Запуск мобильного приложения
-
-В терминале перейдите в корень и запустите:
 
 ```bash
 cd /Users/vikdays/Documents/devtools/projects/pipe-bending-mobile
@@ -50,13 +46,8 @@ npm run mobile:start
 npm run mobile:start -- --clear
 ```
 
-Альтернативный запуск непосредственно из мобильной папки:
 
 ```bash
 cd /Users/vikdays/Documents/devtools/projects/pipe-bending-mobile/apps/mobile
 npx expo start --go
 ```
-
-На этом Mac зависимости перенесены вместе с приложением. После первого клонирования на другом компьютере установите их из сохранённого lock-файла:
-
-```bash

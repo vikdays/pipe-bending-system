@@ -6,6 +6,11 @@
   "scripts": {
     "start": "npm run mobile:start",
     "mobile:start": "npm --prefix apps/mobile run start -- --go",
+    "desktop:start": "npm --prefix apps/desktop/frontend run dev",
+    "desktop:build": "npm --prefix apps/desktop/frontend run build",
+    "desktop:typecheck": "npm --prefix apps/desktop/frontend run typecheck",
+    "desktop:lint": "npm --prefix apps/desktop/frontend run lint",
+    "desktop:test": "npm --prefix apps/desktop/frontend run test",
     "typecheck": "npm --prefix apps/mobile run typecheck",
     "lint": "npm --prefix apps/mobile run lint"
   }
