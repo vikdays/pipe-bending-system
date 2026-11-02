@@ -9,6 +9,17 @@ dist/
 web-build/
 expo-env.d.ts
 
+# Wails v3
+/apps/desktop/bin/
+/apps/desktop/.task/
+/apps/desktop/frontend/bindings/
+/apps/desktop/frontend/.bindings-tmp-*/
+/apps/desktop/*.syso
+
+# personal working notes
+/docs/PROJECT_CONTEXT.md
+/docs/REPOSITORY_STRUCTURE.md
+
 # Native
 .kotlin/
 *.orig.*

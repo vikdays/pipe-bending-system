@@ -9,14 +9,17 @@
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
+    "build:dev": "tsc --noEmit && vite build --minify false --mode development",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@wailsio/runtime": "^3.0.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@types/node": "^26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",

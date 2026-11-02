@@ -1,0 +1,10 @@
+[
+  {"code":"VALIDATION_ERROR","message":"Проверьте введённые данные."},
+  {"code":"INVALID_CREDENTIALS","message":"Не удалось войти."},
+  {"code":"UNAUTHENTICATED","message":"Войдите снова."},
+  {"code":"FORBIDDEN","message":"Недостаточно прав."},
+  {"code":"NOT_FOUND","message":"Запись не найдена."},
+  {"code":"CONFLICT","message":"Запись уже существует."},
+  {"code":"RATE_LIMITED","message":"Повторите попытку позже."},
+  {"code":"INTERNAL_ERROR","message":"Не удалось выполнить операцию."}
+]

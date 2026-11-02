@@ -11,6 +11,9 @@
     "desktop:typecheck": "npm --prefix apps/desktop/frontend run typecheck",
     "desktop:lint": "npm --prefix apps/desktop/frontend run lint",
     "desktop:test": "npm --prefix apps/desktop/frontend run test",
+    "desktop:native:start": "cd apps/desktop && wails3 dev",
+    "desktop:native:build": "cd apps/desktop && wails3 build",
+    "desktop:go:test": "cd apps/desktop && go test ./internal/... .",
     "typecheck": "npm --prefix apps/mobile run typecheck",
     "lint": "npm --prefix apps/mobile run lint"
   }

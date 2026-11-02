@@ -10,8 +10,17 @@ import { createDemoTaskService } from '../tasks/taskService';
 import { DashboardAside } from './DashboardAside';
 import { ExchangeInfoModal } from './ExchangeInfoModal';
 import { useDashboard } from './useDashboard';
+import type { AuthUser } from '../auth/authClientCore';
 
-export function DashboardScreen({ onSignOut }: { onSignOut: () => void }) {
+export function DashboardScreen({
+  user,
+  onOpenAccount,
+  onSignOut,
+}: {
+  user: AuthUser;
+  onOpenAccount: () => void;
+  onSignOut: () => void;
+}) {
   const [service] = useState(createDemoTaskService);
   const dashboard = useDashboard(service);
 
@@ -22,6 +31,8 @@ export function DashboardScreen({ onSignOut }: { onSignOut: () => void }) {
         taskCount={dashboard.tasks.length}
         onNavigate={dashboard.navigate}
         onSignOut={onSignOut}
+        user={user}
+        onOpenAccount={onOpenAccount}
       >
         <div className="page-heading">
           <div>

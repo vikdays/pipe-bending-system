@@ -2,18 +2,23 @@ import type { ReactNode } from 'react';
 import { Icon } from '../Icon';
 import { Sidebar } from './Sidebar';
 import type { WorkspaceView } from './workspaceTypes';
+import type { AuthUser } from '../../features/auth/authClientCore';
 
 export function AppShell({
   view,
   taskCount,
   onNavigate,
   onSignOut,
+  user,
+  onOpenAccount,
   children,
 }: {
   view: WorkspaceView;
   taskCount: number;
   onNavigate: (view: WorkspaceView) => void;
   onSignOut: () => void;
+  user: AuthUser;
+  onOpenAccount: () => void;
   children: ReactNode;
 }) {
   return (
@@ -27,10 +32,17 @@ export function AppShell({
             <strong>{view === 'overview' ? 'Обзор' : 'Задания'}</strong>
           </div>
           <div className="topbar-user">
-            <span className="avatar">РР</span>
+            <button
+              className="avatar"
+              type="button"
+              onClick={onOpenAccount}
+              aria-label="Открыть учётную запись"
+            >
+              {user.username.slice(0, 2).toUpperCase()}
+            </button>
             <div>
-              <strong>Руководитель работ</strong>
-              <span>Демонстрационный вход</span>
+              <strong>{user.username}</strong>
+              <span>Руководитель работ</span>
             </div>
             <span className="topbar-divider" />
             <button

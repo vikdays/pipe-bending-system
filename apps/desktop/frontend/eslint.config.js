@@ -5,7 +5,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default tseslint.config(
-  { ignores: ['dist', 'wailsjs', 'bindings'] },
+  { ignores: ['dist', 'wailsjs', 'bindings', '.bindings-tmp-*'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
