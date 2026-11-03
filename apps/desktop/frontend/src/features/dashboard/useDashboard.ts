@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import type { WorkspaceView } from '../../components/layout/workspaceTypes';
 import type { TaskService } from '../tasks/taskService';
+import type { PipeService } from '../pipes/pipeService';
+import type { Pipe } from '../pipes/pipeTypes';
+import { authErrorMessage } from '../auth/appError';
 import type {
-  PipeOption,
   Task,
   TaskCounts,
   TaskDraft,
@@ -15,10 +17,10 @@ type DashboardDialog =
   | { kind: 'exchange' }
   | null;
 
-export function useDashboard(service: TaskService) {
+export function useDashboard(service: TaskService, pipeService: PipeService) {
   const [view, setView] = useState<WorkspaceView>('overview');
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [pipeOptions, setPipeOptions] = useState<PipeOption[]>([]);
+  const [pipeOptions, setPipeOptions] = useState<Pipe[]>([]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<TaskFilter>('all');
   const [dialog, setDialog] = useState<DashboardDialog>(null);
@@ -31,22 +33,22 @@ export function useDashboard(service: TaskService) {
 
   useEffect(() => {
     let active = true;
-    Promise.all([service.getTasks(), service.getPipeOptions()])
+    Promise.all([service.getTasks(), pipeService.getPipes()])
       .then(([loadedTasks, loadedPipes]) => {
         if (!active) return;
         setTasks(loadedTasks);
         setPipeOptions(loadedPipes);
         setIsLoading(false);
       })
-      .catch(() => {
+      .catch((error: unknown) => {
         if (!active) return;
-        setLoadError('Не удалось получить список заданий. Попробуйте ещё раз.');
+        setLoadError(authErrorMessage(error));
         setIsLoading(false);
       });
     return () => {
       active = false;
     };
-  }, [service, loadAttempt]);
+  }, [service, pipeService, loadAttempt]);
 
   useEffect(() => {
     if (!toast) return;
@@ -58,8 +60,14 @@ export function useDashboard(service: TaskService) {
   const visibleTasks = tasks.filter(
     (task) =>
       (filter === 'all' || task.status === filter) &&
-      [task.number, task.pipeNumber, task.bendNumber, task.machine].some(
-        (value) => value.toLocaleLowerCase('ru-RU').includes(normalizedQuery),
+      [
+        task.number,
+        task.pipeNumber,
+        task.pipeInventoryNumber,
+        task.bendNumber,
+        task.machine,
+      ].some((value) =>
+        value.toLocaleLowerCase('ru-RU').includes(normalizedQuery),
       ),
   );
   const counts = tasks.reduce<TaskCounts>(
@@ -104,13 +112,9 @@ export function useDashboard(service: TaskService) {
       setTasks((current) => [task, ...current]);
       setDialog(null);
       resetFilters();
-      setToast(`Черновик ${task.number} добавлен в демонстрационный список`);
+      setToast(`Черновик ${task.number} сохранён`);
     } catch (error) {
-      setCreateError(
-        error instanceof Error
-          ? error.message
-          : 'Не удалось создать задание. Попробуйте ещё раз.',
-      );
+      setCreateError(authErrorMessage(error));
     } finally {
       setIsCreating(false);
     }

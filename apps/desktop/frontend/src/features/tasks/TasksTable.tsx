@@ -40,6 +40,9 @@ export function TasksTable({
               </td>
               <td>
                 <strong className="cell-primary">{task.pipeNumber}</strong>
+                <span className="cell-secondary">
+                  {task.pipeInventoryNumber}
+                </span>
                 <span className="cell-secondary">{task.dimensions}</span>
               </td>
               <td>

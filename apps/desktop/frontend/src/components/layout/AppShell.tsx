@@ -29,7 +29,13 @@ export function AppShell({
           <div className="breadcrumbs">
             <span>Рабочее место</span>
             <Icon name="chevron" size={14} />
-            <strong>{view === 'overview' ? 'Обзор' : 'Задания'}</strong>
+            <strong>
+              {view === 'overview'
+                ? 'Обзор'
+                : view === 'pipes'
+                  ? 'Трубный журнал'
+                  : 'Задания'}
+            </strong>
           </div>
           <div className="topbar-user">
             <button

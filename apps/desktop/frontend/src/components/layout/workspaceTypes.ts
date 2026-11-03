@@ -1,1 +1,1 @@
-export type WorkspaceView = 'overview' | 'tasks';
+export type WorkspaceView = 'overview' | 'tasks' | 'pipes';

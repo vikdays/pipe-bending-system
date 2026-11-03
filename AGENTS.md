@@ -3,7 +3,7 @@
 This is a monorepo for an offline pipe bending control prototype.
 
 - `apps/mobile`: existing React Native + TypeScript + Expo application. Read `apps/mobile/AGENTS.md` before changing it. Resolve its package versions, assets and Expo commands from that directory.
-- `apps/desktop`: Windows Wails + Go application with a React + TypeScript frontend, local SQLite authentication and in-memory demo tasks. macOS is used for development; Windows runtime verification is still required.
+- `apps/desktop`: Windows Wails + Go application with a React + TypeScript frontend. Authentication, the pipe register, certificate references, Excel import drafts and tasks use local SQLite. PDF originals are private content-addressed attachments. Imports require preview and explicit selection; conflicts never overwrite pipes. Tasks reference a pipe ID and preserve its snapshot. macOS is used for development; Windows runtime verification is still required.
 - `packages/domain` and `packages/contracts`: future platform-independent TypeScript code, not yet configured as npm packages.
 - `docs`: requirements, design decisions and development instructions.
 - `examples`: fictional data only.

@@ -6,12 +6,16 @@ export function Modal({
   title,
   description,
   closeDisabled = false,
+  wide = false,
+  extraWide = false,
   onClose,
   children,
 }: {
   title: string;
   description?: string;
   closeDisabled?: boolean;
+  wide?: boolean;
+  extraWide?: boolean;
   onClose: () => void;
   children: ReactNode;
 }) {
@@ -25,7 +29,13 @@ export function Modal({
   return (
     <dialog
       ref={ref}
-      className="modal"
+      className={
+        extraWide
+          ? 'modal modal--extra-wide'
+          : wide
+            ? 'modal modal--wide'
+            : 'modal'
+      }
       aria-labelledby={titleId}
       onCancel={(event) => {
         event.preventDefault();

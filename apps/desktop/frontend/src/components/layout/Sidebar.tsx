@@ -34,9 +34,9 @@ export function Sidebar({
           <span className="nav-count">{taskCount}</span>
         </button>
         <button
-          className="nav-item"
-          disabled
-          title="Трубный журнал будет реализован следующим этапом"
+          className={`nav-item ${view === 'pipes' ? 'nav-item--active' : ''}`}
+          aria-current={view === 'pipes' ? 'page' : undefined}
+          onClick={() => onNavigate('pipes')}
         >
           <Icon name="pipe" />
           <span>Трубный журнал</span>

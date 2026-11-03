@@ -89,7 +89,7 @@ func migrate(db *sql.DB) error {
 	if err = tx.QueryRow("PRAGMA user_version").Scan(&version); err != nil {
 		return err
 	}
-	files := []string{"migrations/001_auth.sql", "migrations/002_shorter_lockout.sql"}
+	files := []string{"migrations/001_auth.sql", "migrations/002_shorter_lockout.sql", "migrations/003_pipe_registry.sql", "migrations/004_registry_imports_documents.sql"}
 	if version > len(files) {
 		return fmt.Errorf("database version is newer than this application")
 	}

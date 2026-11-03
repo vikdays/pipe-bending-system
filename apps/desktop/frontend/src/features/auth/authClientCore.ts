@@ -101,6 +101,7 @@ export function createAuthClient(transport: AuthTransport, now = Date.now) {
   }
 
   return {
+    runAuthorized: withAccess,
     needsSetup: () => call(() => transport.NeedsSetup()),
     bootstrap: (username: string, password: string) =>
       call(() => transport.Bootstrap(username, password)),

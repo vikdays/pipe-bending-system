@@ -1,65 +1,49 @@
-import { demoTasks } from './demoTasks.ts';
-import type { PipeOption, Task, TaskDraft } from './taskTypes.ts';
-
-// Async boundary for a future Go/Wails implementation; no React dependencies.
+import { normalizePipe } from '../pipes/pipeTypes.ts';
+import { pipeDimensions } from '../pipes/pipeFields.ts';
+import type { Authorize } from '../pipes/pipeService.ts';
+import type {
+  Task as TaskDTO,
+  TaskInput,
+} from '../../../bindings/changeme/internal/registry/models';
+import type { Task, TaskDraft } from './taskTypes.ts';
 export interface TaskService {
   getTasks(): Promise<Task[]>;
-  getPipeOptions(): Promise<PipeOption[]>;
   createTask(draft: TaskDraft): Promise<Task>;
 }
-
-// One independent in-memory list per mounted dashboard. No persistent storage.
-export function createDemoTaskService(): TaskService {
-  let tasks = demoTasks.map((task) => ({ ...task }));
-  const pipes = Array.from(
-    new Map(
-      demoTasks.map((task) => [
-        task.pipeNumber,
-        { number: task.pipeNumber, dimensions: task.dimensions },
-      ]),
-    ).values(),
-  );
-
+export interface TaskTransport {
+  ListTasks(access: string): Promise<TaskDTO[] | null>;
+  CreateTask(access: string, input: TaskInput): Promise<TaskDTO>;
+}
+function toTask(record: TaskDTO): Task {
+  if (!['draft', 'ready', 'sent', 'completed'].includes(record.status))
+    throw new Error('Неподдерживаемый статус задания.');
+  const pipe = normalizePipe(record.pipeSnapshot);
   return {
-    async getTasks() {
-      return tasks.map((task) => ({ ...task }));
-    },
-    async getPipeOptions() {
-      return pipes.map((pipe) => ({ ...pipe }));
-    },
-    async createTask(draft) {
-      const number = draft.number.trim();
-      const bendNumber = draft.bendNumber.trim();
-      const machine = draft.machine.trim();
-      const targetAngle = draft.targetAngle.trim().replace(',', '.');
-      const pipe = pipes.find((item) => item.number === draft.pipeNumber);
-
-      if (!number || !bendNumber || !machine) {
-        throw new Error(
-          'Заполните номер задания, номер отвода и модель станка.',
-        );
-      }
-      if (!pipe) {
-        throw new Error('Выберите трубу из демонстрационного списка.');
-      }
-      if (!/^\d+(\.\d+)?$/.test(targetAngle)) {
-        throw new Error('Введите целевой угол числом, например 9 или 9,5.');
-      }
-
-      // Only input syntax is checked. Production compatibility and limits are not defined.
-      const task: Task = {
-        id: crypto.randomUUID(),
-        number,
-        pipeNumber: pipe.number,
-        dimensions: pipe.dimensions,
-        bendNumber,
-        machine,
-        targetAngle,
-        status: 'draft',
-        date: new Intl.DateTimeFormat('ru-RU').format(new Date()),
-      };
-      tasks = [{ ...task }, ...tasks];
-      return task;
-    },
+    id: record.id,
+    number: record.number,
+    pipeId: record.pipeId,
+    pipeRevision: record.pipeRevision,
+    pipeInventoryNumber: pipe.inventoryNumber,
+    pipeNumber: pipe.factoryNumber,
+    pipeSnapshot: pipe,
+    dimensions: pipeDimensions(pipe),
+    bendNumber: record.bendNumber,
+    machine: record.machine,
+    targetAngle: record.targetAngle,
+    status: record.status as Task['status'],
+    date: new Intl.DateTimeFormat('ru-RU').format(new Date(record.createdAt)),
+  };
+}
+export function createTaskService(
+  transport: TaskTransport,
+  authorize: Authorize,
+): TaskService {
+  return {
+    getTasks: async () =>
+      ((await authorize((access) => transport.ListTasks(access))) ?? []).map(
+        toTask,
+      ),
+    createTask: async (draft) =>
+      toTask(await authorize((access) => transport.CreateTask(access, draft))),
   };
 }

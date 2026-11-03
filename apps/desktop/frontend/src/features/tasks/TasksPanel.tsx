@@ -74,7 +74,7 @@ export function TasksPanel({
         <span>
           Показано {tasks.length} из {total}
         </span>
-        <span>Данные для демонстрации</span>
+        <span>Локальный журнал заданий</span>
       </div>
     </section>
   );

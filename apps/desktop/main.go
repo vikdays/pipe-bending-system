@@ -8,6 +8,8 @@ import (
 
 	"changeme/internal/apperror"
 	"changeme/internal/auth"
+	"changeme/internal/documents"
+	"changeme/internal/registry"
 	"changeme/internal/storage"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
@@ -21,11 +23,16 @@ func main() {
 	if err != nil {
 		log.Fatal("Не удалось определить папку данных приложения")
 	}
-	db, err := storage.Open(filepath.Join(configDir, "PipeBendingControl"))
+	dataDirectory := filepath.Join(configDir, "PipeBendingControl")
+	db, err := storage.Open(dataDirectory)
 	if err != nil {
 		log.Fatal("Не удалось открыть локальную базу данных приложения")
 	}
 	defer db.Close()
+	documentStore, err := documents.New(db, dataDirectory)
+	if err != nil {
+		log.Fatal("Не удалось открыть хранилище оригиналов документов")
+	}
 	manager, err := auth.New(db)
 	if err != nil {
 		log.Fatal("Не удалось запустить проверку учётных записей")
@@ -38,6 +45,14 @@ func main() {
 		Description: "Цифровой контроль изготовления отводов холодного гнутья",
 		Services: []application.Service{
 			application.NewServiceWithOptions(authService, application.ServiceOptions{
+				MarshalError: apperror.Marshal,
+			}),
+			application.NewServiceWithOptions(&DesktopRegistryService{auth: manager, repository: registry.New(db), documents: documentStore, imports: registry.NewImportManager(db, documentStore),
+				chooseFile: func(title, pattern string) (string, error) {
+					return application.Get().Dialog.OpenFile().SetTitle(title).AddFilter("Документы", pattern).PromptForSingleSelection()
+				},
+				openFile: func(path string) error { return application.Get().Browser.OpenFile(path) },
+			}, application.ServiceOptions{
 				MarshalError: apperror.Marshal,
 			}),
 		},

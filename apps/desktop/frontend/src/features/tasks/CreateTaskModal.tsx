@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Modal } from '../../components/Modal';
 import { Icon } from '../../components/Icon';
-import type { PipeOption, TaskDraft } from './taskTypes';
+import type { TaskDraft } from './taskTypes';
+import type { Pipe } from '../pipes/pipeTypes';
+import { pipeDimensions } from '../pipes/pipeFields';
 
 export function CreateTaskModal({
   nextNumber,
@@ -12,18 +15,21 @@ export function CreateTaskModal({
   onClose,
 }: {
   nextNumber: number;
-  pipeOptions: PipeOption[];
+  pipeOptions: Pipe[];
   isSubmitting: boolean;
   error: string;
   onCreate: (draft: TaskDraft) => Promise<void>;
   onClose: () => void;
 }) {
+  const [pipeId, setPipeId] = useState('');
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     void onCreate({
       number: String(form.get('number')),
-      pipeNumber: String(form.get('pipe')),
+      pipeId,
+      pipeRevision:
+        pipeOptions.find((pipe) => pipe.id === pipeId)?.revision ?? 0,
       bendNumber: String(form.get('bend')),
       machine: String(form.get('machine')),
       targetAngle: String(form.get('angle')),
@@ -33,7 +39,7 @@ export function CreateTaskModal({
   return (
     <Modal
       title="Новое задание"
-      description="Демонстрационный черновик для просмотра интерфейса."
+      description="Выберите конкретную трубу из трубного журнала. Её характеристики сохранятся в задании."
       closeDisabled={isSubmitting}
       onClose={onClose}
     >
@@ -62,21 +68,28 @@ export function CreateTaskModal({
             <select
               name="pipe"
               required
-              defaultValue={pipeOptions[0]?.number ?? ''}
+              value={pipeId}
+              onChange={(event) => setPipeId(event.target.value)}
             >
+              <option value="" disabled>
+                Выберите трубу
+              </option>
               {pipeOptions.map((pipe) => (
-                <option key={pipe.number} value={pipe.number}>
-                  {pipe.number} · {pipe.dimensions}
+                <option key={pipe.id} value={pipe.id}>
+                  {pipe.inventoryNumber} · зав. № {pipe.factoryNumber} ·{' '}
+                  {pipeDimensions(pipe)}
                 </option>
               ))}
             </select>
           </label>
           <label className="form-field">
             Модель станка
-            <select name="machine" defaultValue="ГТ532">
-              <option>ГТ532</option>
-              <option>ГТ1022</option>
-            </select>
+            <input
+              name="machine"
+              required
+              maxLength={160}
+              placeholder="Укажите модель по выбранной техкарте"
+            />
           </label>
           <label className="form-field">
             Целевой угол, °
@@ -92,8 +105,9 @@ export function CreateTaskModal({
         <div className="inline-note">
           <Icon name="info" size={18} />
           <p>
-            Это макет формы. Совместимость трубы и станка не проверяется.
-            Черновик хранится только до обновления страницы.
+            Перед созданием задания у трубы должны быть заполнены диаметр,
+            толщина стенки и длина. Проверка совместимости со станком по
+            технологической карте пока не подключена.
           </p>
         </div>
         {error && (

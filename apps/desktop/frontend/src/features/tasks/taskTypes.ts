@@ -1,12 +1,15 @@
-// View model used by the demo. This is not the database or exchange schema.
+import type { Pipe } from '../pipes/pipeTypes';
 export type TaskStatus = 'draft' | 'ready' | 'sent' | 'completed';
 export type TaskFilter = 'all' | TaskStatus;
 export type TaskCounts = Record<TaskStatus, number>;
-
 export interface Task {
   id: string;
   number: string;
+  pipeId: string;
+  pipeRevision: number;
+  pipeInventoryNumber: string;
   pipeNumber: string;
+  pipeSnapshot: Pipe;
   dimensions: string;
   bendNumber: string;
   machine: string;
@@ -14,16 +17,11 @@ export interface Task {
   status: TaskStatus;
   date: string;
 }
-
 export interface TaskDraft {
   number: string;
-  pipeNumber: string;
+  pipeId: string;
+  pipeRevision: number;
   bendNumber: string;
   machine: string;
   targetAngle: string;
-}
-
-export interface PipeOption {
-  number: string;
-  dimensions: string;
 }

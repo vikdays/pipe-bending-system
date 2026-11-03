@@ -28,7 +28,7 @@ func TestDatabaseMigrationAndRestart(t *testing.T) {
 	if err = db.QueryRow("SELECT COUNT(*) FROM users").Scan(&count); err != nil || count != 1 {
 		t.Fatalf("count=%d err=%v", count, err)
 	}
-	if err = db.QueryRow("PRAGMA user_version").Scan(&version); err != nil || version != 2 {
+	if err = db.QueryRow("PRAGMA user_version").Scan(&version); err != nil || version != 4 {
 		t.Fatal(version, err)
 	}
 	if runtime.GOOS != "windows" {
@@ -59,7 +59,7 @@ func TestUpgradeShortensExistingLockoutsOnlyOnce(t *testing.T) {
 	if _, err = db.Exec("INSERT INTO auth_limits(scope,failures,window_start,blocked_until) VALUES('global',30,?,?)", blockedAt-60, blockedAt+15*60); err != nil {
 		t.Fatal(err)
 	}
-	if _, err = db.Exec("PRAGMA user_version = 1"); err != nil {
+	if _, err = db.Exec("DROP TABLE registry_import_rows; DROP TABLE registry_imports; DROP TABLE document_link_events; DROP TABLE certificate_documents; DROP TABLE document_files; DROP TABLE manufacturing_tasks; DROP TABLE pipe_certificates; DROP TABLE certificates; DROP TABLE pipes; PRAGMA user_version = 1"); err != nil {
 		t.Fatal(err)
 	}
 	if err = db.Close(); err != nil {

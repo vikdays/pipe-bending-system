@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Brand } from '../../components/Brand';
 import { Icon } from '../../components/Icon';
-import { PipeBlueprint } from '../../components/PipeBlueprint';
 import { authErrorMessage } from './authClient';
 
 export function LoginScreen({
@@ -49,44 +47,6 @@ export function LoginScreen({
 
   return (
     <main className="login-screen">
-      <section className="login-story" aria-label="О системе">
-        <Brand />
-        <div className="login-story-content">
-          <h1>
-            Цифровой контроль
-            <br />
-            гибки труб
-          </h1>
-          <p>
-            Подготовка заданий, история измерений
-            <br className="desktop-break" /> и результаты изготовления — в одной
-            системе.
-          </p>
-          <PipeBlueprint />
-          <div className="story-points">
-            <span>
-              <Icon name="clipboard" size={18} />
-              Задания
-            </span>
-            <i />
-            <span>
-              <Icon name="pipe" size={18} />
-              Измерения
-            </span>
-            <i />
-            <span>
-              <Icon name="file" size={18} />
-              Протоколы
-            </span>
-          </div>
-        </div>
-        <div className="login-story-footer">
-          <Icon name="shield" size={17} />
-          <span>Автономная работа на предприятии</span>
-          <span className="version-label">Прототип 0.1</span>
-        </div>
-      </section>
-
       <section className="login-form-section">
         <div className="login-form-wrap">
           <div className="workspace-icon">
@@ -209,16 +169,6 @@ export function LoginScreen({
               <Icon name="arrow" size={19} />
             </button>
           </form>
-          <div className="login-account-note">
-            <Icon name="shield" size={19} />
-            <div>
-              <strong>Локальная учётная запись</strong>
-              <p>
-                Для входа Интернет не требуется. После закрытия приложения
-                войдите снова.
-              </p>
-            </div>
-          </div>
         </div>
         <footer className="login-form-footer">
           Система контроля изготовления отводов холодного гнутья
