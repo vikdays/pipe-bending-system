@@ -1,6 +1,8 @@
 package main
 
 import (
+	"sync"
+
 	"changeme/internal/apperror"
 	"changeme/internal/auth"
 	"changeme/internal/documents"
@@ -9,12 +11,16 @@ import (
 
 // DesktopRegistryService checks the current native session for every operation.
 type DesktopRegistryService struct {
-	auth       *auth.Manager
-	repository *registry.Repository
-	documents  *documents.Store
-	imports    *registry.ImportManager
-	chooseFile func(title, pattern string) (string, error)
-	openFile   func(path string) error
+	auth           *auth.Manager
+	repository     *registry.Repository
+	documents      *documents.Store
+	imports        *registry.ImportManager
+	technicalCards *registry.TechnicalCardManager
+	chooseFile     func(title, pattern string) (string, error)
+	openFile       func(path string) error
+	saveFile       func(filename string) (string, error)
+	writeExport    func(path string, data []byte) error
+	exportMu       sync.Mutex
 }
 
 func (s *DesktopRegistryService) requireAdmin(access string) (auth.User, error) {

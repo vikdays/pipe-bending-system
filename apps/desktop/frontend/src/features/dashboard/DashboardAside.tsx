@@ -23,7 +23,7 @@ export function DashboardAside({
           <span>Через USB-накопитель</span>
         </div>
         <button className="exchange-link" onClick={onOpenExchange}>
-          Как устроен обмен
+          Журнал обмена
           <Icon name="arrow" size={17} />
         </button>
       </section>
@@ -56,8 +56,9 @@ export function DashboardAside({
       <div className="next-step-note">
         <Icon name="info" size={16} />
         <p>
-          Добавьте исходные трубы в журнал. Конфигурации и файловый обмен будут
-          подключены на следующих этапах.
+          Подготовьте задания и нажмите «Выгрузить задания», чтобы сохранить их
+          одним JSON-файлом. Импорт результатов будет доступен на следующем
+          этапе.
         </p>
       </div>
     </aside>

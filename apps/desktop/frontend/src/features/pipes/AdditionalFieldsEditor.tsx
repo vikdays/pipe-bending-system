@@ -3,9 +3,15 @@ import type { AdditionalField } from './pipeFields';
 export function AdditionalFieldsEditor({
   fields,
   onChange,
+  description = 'Здесь можно сохранить другие сведения из документов, включая химический состав и результаты испытаний.',
+  nameMaxLength = 300,
+  valueMaxLength = 2000,
 }: {
   fields: AdditionalField[];
   onChange: (fields: AdditionalField[]) => void;
+  description?: string;
+  nameMaxLength?: number;
+  valueMaxLength?: number;
 }) {
   function update(index: number, key: keyof AdditionalField, value: string) {
     onChange(
@@ -16,17 +22,14 @@ export function AdditionalFieldsEditor({
   }
   return (
     <div className="additional-fields">
-      <p className="auth-help">
-        Здесь можно сохранить другие сведения из документов, включая химический
-        состав и результаты испытаний.
-      </p>
+      <p className="auth-help">{description}</p>
       {fields.map((field, index) => (
         <div className="additional-field-row" key={index}>
           <label className="form-field">
             Характеристика
             <input
               value={field.name}
-              maxLength={300}
+              maxLength={nameMaxLength}
               onChange={(event) => update(index, 'name', event.target.value)}
             />
           </label>
@@ -34,7 +37,7 @@ export function AdditionalFieldsEditor({
             Значение
             <input
               value={field.value}
-              maxLength={2000}
+              maxLength={valueMaxLength}
               onChange={(event) => update(index, 'value', event.target.value)}
             />
           </label>

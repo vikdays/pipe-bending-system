@@ -43,7 +43,9 @@ func TestRegistryServiceRequiresCurrentAdminSession(t *testing.T) {
 	}
 	service.documents = store
 	service.imports = registry.NewImportManager(db, store)
+	service.technicalCards = registry.NewTechnicalCardManager(db, store)
 	chooserCalls := 0
+	service.saveFile = func(string) (string, error) { chooserCalls++; return "", nil }
 	service.chooseFile = func(string, string) (string, error) { chooserCalls++; return "", nil }
 	for _, test := range []struct {
 		access string
@@ -53,6 +55,10 @@ func TestRegistryServiceRequiresCurrentAdminSession(t *testing.T) {
 		requireError(t, err, test.code)
 		_, err = service.ListCertificates(test.access)
 		requireError(t, err, test.code)
+		_, err = service.ExportTasks(test.access, []registry.TaskExportSelection{{ID: "missing", Revision: 1}})
+		requireError(t, err, test.code)
+		_, err = service.ListExchangeEvents(test.access)
+		requireError(t, err, test.code)
 		_, err = service.ListTasks(test.access)
 		requireError(t, err, test.code)
 		_, err = service.CreatePipe(test.access, registry.PipeInput{})
@@ -60,6 +66,33 @@ func TestRegistryServiceRequiresCurrentAdminSession(t *testing.T) {
 		_, err = service.UpdatePipe(test.access, "missing", 1, registry.PipeInput{})
 		requireError(t, err, test.code)
 		_, err = service.CreateTask(test.access, registry.TaskInput{})
+		requireError(t, err, test.code)
+		_, err = service.GetTask(test.access, "missing")
+		requireError(t, err, test.code)
+		_, err = service.CreateTasks(test.access, registry.TaskBatchInput{})
+		requireError(t, err, test.code)
+		_, err = service.UpdateTask(test.access, "missing", 1, registry.TaskInput{})
+		requireError(t, err, test.code)
+		_, err = service.PrepareTask(test.access, "missing", 1)
+		requireError(t, err, test.code)
+
+		_, err = service.ListMachines(test.access)
+		requireError(t, err, test.code)
+		_, err = service.PrepareTechnicalCardImport(test.access, "m_gt532")
+		requireError(t, err, test.code)
+		_, err = service.GetTechnicalCard(test.access, "missing")
+		requireError(t, err, test.code)
+		_, err = service.ListTechnicalCards(test.access)
+		requireError(t, err, test.code)
+		_, err = service.CommitTechnicalCardImport(test.access, "missing", []string{"row"})
+		requireError(t, err, test.code)
+		err = service.OpenTechnicalCard(test.access, "missing")
+		requireError(t, err, test.code)
+		_, err = service.ListConfigurations(test.access)
+		requireError(t, err, test.code)
+		_, err = service.CreateConfiguration(test.access, registry.ConfigurationInput{})
+		requireError(t, err, test.code)
+		_, err = service.UpdateConfiguration(test.access, "missing", 1, registry.ConfigurationInput{})
 		requireError(t, err, test.code)
 		_, err = service.PrepareExcelImport(test.access)
 		requireError(t, err, test.code)
@@ -91,6 +124,13 @@ func TestRegistryServiceRequiresCurrentAdminSession(t *testing.T) {
 	}
 	if p, e := service.PrepareExcelImport(admin.Session.AccessToken); e != nil || p != nil {
 		t.Fatal("cancelled Excel selection should be a no-op", e)
+	}
+
+	if p, e := service.PrepareTechnicalCardImport(admin.Session.AccessToken, "m_gt532"); e != nil || p != nil {
+		t.Fatal("cancelled DOCX selection should be a no-op", e)
+	}
+	if machines, e := service.ListMachines(admin.Session.AccessToken); e != nil || len(machines) != 2 {
+		t.Fatal("machines not seeded", e)
 	}
 	c, e := service.CreateCertificate(admin.Session.AccessToken, registry.CertificateDraft{Reference: "Fictional certificate"})
 	if e != nil {

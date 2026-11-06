@@ -109,7 +109,11 @@ func TestValidationAndMissingCertificateDoNotPartiallyWrite(t *testing.T) {
 	if err != nil || pipe.DiameterMm != nil || pipe.AttributesJSON != "{}" {
 		t.Fatal("unknown values must remain null", err)
 	}
-	_, err = r.CreateTask(TaskInput{Number: "TASK", PipeID: pipe.ID, PipeRevision: 1, BendNumber: "BEND", Machine: "Указано вручную", TargetAngle: "9"}, "actor")
+	draft, err := r.CreateTask(TaskInput{Number: "TASK", PipeID: pipe.ID, PipeRevision: 1, BendNumber: "BEND", Machine: "Указано вручную", TargetAngle: "9"}, "actor")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = r.PrepareTask(draft.ID, draft.Revision, "actor")
 	assertCode(t, err, apperror.ValidationError)
 }
 

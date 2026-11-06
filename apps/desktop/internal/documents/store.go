@@ -55,8 +55,8 @@ func New(db *sql.DB, dataDirectory string) (*Store, error) {
 // Ingest copies first, validates that exact private copy, then records immutable content.
 // Validator must not calculate workbook formulas or contact external services.
 func (s *Store) Ingest(sourcePath, kind, actorID string, validate func(*os.File) error) (File, error) {
-	if (kind != "pdf" && kind != "xlsx") || !strings.EqualFold(filepath.Ext(sourcePath), "."+kind) {
-		return File{}, apperror.New(apperror.ValidationError, "Выберите файл нужного формата: .xlsx или .pdf.")
+	if (kind != "pdf" && kind != "xlsx" && kind != "docx") || !strings.EqualFold(filepath.Ext(sourcePath), "."+kind) {
+		return File{}, apperror.New(apperror.ValidationError, "Выберите файл нужного формата: .xlsx, .pdf или .docx.")
 	}
 	source, err := os.Open(sourcePath)
 	if err != nil {
@@ -210,7 +210,7 @@ func (s *Store) ManagedPath(id string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if !digestPattern.MatchString(file.SHA256) || (file.Kind != "xlsx" && file.Kind != "pdf") {
+	if !digestPattern.MatchString(file.SHA256) || (file.Kind != "xlsx" && file.Kind != "pdf" && file.Kind != "docx") {
 		return "", errStorage
 	}
 	for _, path := range []string{s.root, filepath.Join(s.root, file.Kind), filepath.Join(s.root, file.Kind, file.SHA256[:2])} {

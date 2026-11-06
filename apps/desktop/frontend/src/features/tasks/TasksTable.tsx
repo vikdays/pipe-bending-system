@@ -16,6 +16,7 @@ export function TasksTable({
       <table className="task-table">
         <thead>
           <tr>
+            <th scope="col">Очередь</th>
             <th scope="col">Задание</th>
             <th scope="col">Исходная труба</th>
             <th scope="col">Отвод / станок</th>
@@ -29,6 +30,7 @@ export function TasksTable({
         <tbody>
           {tasks.map((task) => (
             <tr key={task.id}>
+              <td>{task.queuePosition}</td>
               <td>
                 <button
                   className="table-link"
@@ -46,13 +48,18 @@ export function TasksTable({
                 <span className="cell-secondary">{task.dimensions}</span>
               </td>
               <td>
-                <span className="cell-primary">{task.bendNumber}</span>
-                <span className="cell-secondary">{task.machine}</span>
+                <span className="cell-primary">
+                  {task.bendNumber || 'Отвод не указан'}
+                  {task.bendType ? ` · ${task.bendType}` : ''}
+                </span>
+                <span className="cell-secondary">
+                  {task.machine || 'Станок не выбран'}
+                </span>
               </td>
               <td>
                 <span className="angle-value">
-                  {task.targetAngle}
-                  <span>°</span>
+                  {task.targetAngle || '—'}
+                  {task.targetAngle && <span>°</span>}
                 </span>
               </td>
               <td>

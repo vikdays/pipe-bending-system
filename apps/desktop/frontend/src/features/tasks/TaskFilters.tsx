@@ -6,6 +6,7 @@ const filters: { id: Filter; label: string }[] = [
   { id: 'all', label: 'Все' },
   { id: 'draft', label: 'Черновики' },
   { id: 'ready', label: 'Готовы к передаче' },
+  { id: 'exported', label: 'Выгружены' },
   { id: 'sent', label: 'Переданы' },
   { id: 'completed', label: 'Завершены' },
 ];

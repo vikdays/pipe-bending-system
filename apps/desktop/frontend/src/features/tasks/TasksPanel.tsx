@@ -40,7 +40,6 @@ export function TasksPanel({
       <div className="panel-heading">
         <div>
           <h2 id="tasks-heading">Задания на изготовление</h2>
-          <p>От подготовки до получения результатов</p>
         </div>
         <span className="panel-total">{total}</span>
       </div>

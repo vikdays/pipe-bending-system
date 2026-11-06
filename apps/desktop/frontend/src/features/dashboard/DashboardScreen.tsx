@@ -2,6 +2,7 @@ import { Icon } from '../../components/Icon';
 import { Toast } from '../../components/Toast';
 import { AppShell } from '../../components/layout/AppShell';
 import { CreateTaskModal } from '../tasks/CreateTaskModal';
+import { ExportTasksModal } from '../tasks/ExportTasksModal';
 import { TaskDetailsModal } from '../tasks/TaskDetailsModal';
 import { TasksPanel } from '../tasks/TasksPanel';
 import { TaskSummaryCards } from '../tasks/TaskSummaryCards';
@@ -11,6 +12,8 @@ import { documentService } from '../pipes/documentClient';
 import { PipesScreen } from '../pipes/PipesScreen';
 import { DashboardAside } from './DashboardAside';
 import { ExchangeInfoModal } from './ExchangeInfoModal';
+import { TechnicalCardsModal } from '../tasks/TechnicalCardsModal';
+import { technicalCardService } from '../tasks/technicalCardClient';
 import { useDashboard } from './useDashboard';
 import type { AuthUser } from '../auth/authClientCore';
 
@@ -45,18 +48,27 @@ export function DashboardScreen({
           <>
             <div className="page-heading">
               <div>
-                <p className="page-kicker">РАБОЧЕЕ МЕСТО РУКОВОДИТЕЛЯ</p>
                 <h1>
                   {dashboard.view === 'overview'
                     ? 'Обзор работы'
                     : 'Задания на изготовление'}
                 </h1>
-                <p>
-                  Подготовка заданий и контроль результатов изготовления
-                  отводов.
-                </p>
               </div>
               <div className="page-actions">
+                <button
+                  className="button button--secondary"
+                  disabled={dashboard.isLoading || dashboard.counts.ready === 0}
+                  onClick={dashboard.openExport}
+                >
+                  Выгрузить задания ({dashboard.counts.ready})
+                </button>
+                <button
+                  className="button button--secondary"
+                  disabled={dashboard.isLoading}
+                  onClick={dashboard.openCards}
+                >
+                  Техкарты и конфигурации
+                </button>
                 <button
                   className="button button--secondary"
                   disabled={dashboard.isLoading}
@@ -72,26 +84,11 @@ export function DashboardScreen({
                   }
                 >
                   <Icon name="plus" size={19} />
-                  Создать задание
+                  Создать задания
                 </button>
               </div>
             </div>
-            <div className="workspace-note">
-              <Icon name="info" size={17} />
-              <span>
-                Трубы и черновики заданий сохраняются на этом компьютере.
-                {dashboard.pipeOptions.length === 0 &&
-                  ' Для первого задания добавьте трубу в трубный журнал.'}
-              </span>
-              {dashboard.pipeOptions.length === 0 && (
-                <button
-                  className="button button--secondary"
-                  onClick={() => dashboard.navigate('pipes')}
-                >
-                  Открыть журнал
-                </button>
-              )}
-            </div>
+           
             <TaskSummaryCards
               total={dashboard.tasks.length}
               counts={dashboard.counts}
@@ -119,22 +116,53 @@ export function DashboardScreen({
       </AppShell>
       {dashboard.dialog?.kind === 'create' && (
         <CreateTaskModal
-          nextNumber={dashboard.tasks.length + 1}
+          task={dashboard.dialog.task}
+          reviewConfiguration={dashboard.dialog.reviewConfiguration}
           pipeOptions={dashboard.pipeOptions}
+          configurations={dashboard.configurations}
+          machines={dashboard.machines}
           isSubmitting={dashboard.isCreating}
           error={dashboard.createError}
-          onCreate={dashboard.createTask}
+          onSave={dashboard.createTask}
+          onConfigurationSaved={dashboard.saveConfiguration}
           onClose={dashboard.closeDialog}
         />
       )}
       {dashboard.dialog?.kind === 'task' && (
         <TaskDetailsModal
           task={dashboard.dialog.task}
+          busy={dashboard.taskBusy}
+          error={dashboard.taskError}
+          onEdit={dashboard.editTask}
+          onPrepare={dashboard.prepareTask}
+          onReviewConfiguration={dashboard.reviewTaskConfiguration}
+          onReload={dashboard.openTask}
+          onOpenOriginal={technicalCardService.openOriginal}
+          onClose={dashboard.closeDialog}
+        />
+      )}
+      {dashboard.dialog?.kind === 'cards' && (
+        <TechnicalCardsModal
+          machines={dashboard.machines}
+          configurations={dashboard.configurations}
+          service={technicalCardService}
+          onConfigurationSaved={dashboard.saveConfiguration}
+          onImported={dashboard.refreshConfigurations}
+          onClose={dashboard.closeDialog}
+        />
+      )}
+      {dashboard.dialog?.kind === 'export' && (
+        <ExportTasksModal
+          service={taskService}
+          onSaved={dashboard.exportSaved}
           onClose={dashboard.closeDialog}
         />
       )}
       {dashboard.dialog?.kind === 'exchange' && (
-        <ExchangeInfoModal onClose={dashboard.closeDialog} />
+        <ExchangeInfoModal
+          service={taskService}
+          onClose={dashboard.closeDialog}
+        />
       )}
       {dashboard.toast && (
         <Toast message={dashboard.toast} onDismiss={dashboard.dismissToast} />

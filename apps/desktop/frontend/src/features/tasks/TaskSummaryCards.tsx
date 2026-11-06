@@ -31,15 +31,15 @@ export function TaskSummaryCards({
           Можно передать на планшет
         </span>
       </button>
-      <button className="stat-card" onClick={() => onFilter('sent')}>
+      <button className="stat-card" onClick={() => onFilter('exported')}>
         <span className="stat-label">
-          Ожидают результатов
+          Выгружены
           <Icon name="clock" size={19} />
         </span>
-        <strong>{counts.sent.toString().padStart(2, '0')}</strong>
+        <strong>{counts.exported.toString().padStart(2, '0')}</strong>
         <span className="stat-caption">
           <span className="small-dot small-dot--amber" />
-          Переданы машинисту
+          JSON-файл сохранён
         </span>
       </button>
       <button className="stat-card" onClick={() => onFilter('completed')}>

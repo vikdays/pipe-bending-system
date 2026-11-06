@@ -1,0 +1,201 @@
+{
+  "format": "pipe-bending.tasks",
+  "schemaVersion": 1,
+  "tasks": [
+    {
+      "id": "11111111-1111-4111-8111-000000000001",
+      "revision": 2,
+      "number": "TEST-001",
+      "queuePosition": 1,
+      "bendNumber": "TEST-BEND-001",
+      "bendType": "1ГО",
+      "targetAngleDeg": 9.5,
+      "notes": "",
+      "createdAt": "2026-11-04T09:00:00Z",
+      "preparedAt": "2026-11-04T09:05:00Z",
+      "snapshotVersion": 1,
+      "pipeSnapshot": {
+        "inventoryNumber": "TEST-001",
+        "factoryNumber": "FICTIONAL-001",
+        "manufacturer": "Вымышленный завод",
+        "diameterMm": 530,
+        "wallThicknessMm": 8,
+        "lengthMm": 12000,
+        "massKg": 1200,
+        "strengthClass": "TEST",
+        "steelGrade": "Условная",
+        "heatNumber": "ПЛ-ДЕМО",
+        "carbonEquivalentPct": 0,
+        "pipeSpecification": "Условный документ",
+        "coatingType": "Условное покрытие",
+        "coatingSpecification": "Условный документ покрытия",
+        "testPressureMpa": 10,
+        "minOperatingTempC": 0,
+        "incomingInspectionReference": "Демонстрационный акт",
+        "allowedCategory54": "Значение из источника",
+        "allowedCategory74": "Не установлено",
+        "notes": "Вымышленные данные",
+        "attributesJson": "{\"customFields\":[{\"name\":\"Дополнительная характеристика\",\"value\":\"исходный текст\",\"unit\":\"\"}],\"original\":{\"unknown\":[0,null,\"—\"]}}",
+        "sourceId": "fictional-pipe-001",
+        "revision": 1,
+        "certificates": []
+      },
+      "configurationSnapshot": {
+        "sourceId": "fictional-configuration-001",
+        "revision": 1,
+        "name": "Вымышленная конфигурация",
+        "version": "TEST-v1",
+        "technicalCardReference": "Условная ТК — только тест",
+        "diameterMm": 530,
+        "bendType": "",
+        "targetAngle": "",
+        "minPipeLengthMm": null,
+        "parameters": [
+          {
+            "name": "Условный параметр",
+            "value": "непроизводственное значение",
+            "unit": ""
+          }
+        ],
+        "notes": ""
+      },
+      "machineSnapshot": {
+        "id": "m_gt532",
+        "name": "ГТ532",
+        "model": "ГТ532",
+        "serialNumber": "",
+        "inventoryNumber": ""
+      }
+    },
+    {
+      "id": "11111111-1111-4111-8111-000000000002",
+      "revision": 2,
+      "number": "TEST-002",
+      "queuePosition": 2,
+      "bendNumber": "TEST-BEND-002",
+      "bendType": "1ГО",
+      "targetAngleDeg": 9.5,
+      "notes": "",
+      "createdAt": "2026-11-04T09:00:00Z",
+      "preparedAt": "2026-11-04T09:05:00Z",
+      "snapshotVersion": 1,
+      "pipeSnapshot": {
+        "inventoryNumber": "TEST-002",
+        "factoryNumber": "FICTIONAL-002",
+        "manufacturer": "Вымышленный завод",
+        "diameterMm": 530,
+        "wallThicknessMm": 8,
+        "lengthMm": 12000,
+        "massKg": 1200,
+        "strengthClass": "TEST",
+        "steelGrade": "Условная",
+        "heatNumber": "ПЛ-ДЕМО",
+        "carbonEquivalentPct": 0,
+        "pipeSpecification": "Условный документ",
+        "coatingType": "Условное покрытие",
+        "coatingSpecification": "Условный документ покрытия",
+        "testPressureMpa": 10,
+        "minOperatingTempC": 0,
+        "incomingInspectionReference": "Демонстрационный акт",
+        "allowedCategory54": "Значение из источника",
+        "allowedCategory74": "Не установлено",
+        "notes": "Вымышленные данные",
+        "attributesJson": "{\"customFields\":[{\"name\":\"Дополнительная характеристика\",\"value\":\"исходный текст\",\"unit\":\"\"}],\"original\":{\"unknown\":[0,null,\"—\"]}}",
+        "sourceId": "fictional-pipe-002",
+        "revision": 1,
+        "certificates": []
+      },
+      "configurationSnapshot": {
+        "sourceId": "fictional-configuration-001",
+        "revision": 1,
+        "name": "Вымышленная конфигурация",
+        "version": "TEST-v1",
+        "technicalCardReference": "Условная ТК — только тест",
+        "diameterMm": 530,
+        "bendType": "",
+        "targetAngle": "",
+        "minPipeLengthMm": null,
+        "parameters": [
+          {
+            "name": "Условный параметр",
+            "value": "непроизводственное значение",
+            "unit": ""
+          }
+        ],
+        "notes": ""
+      },
+      "machineSnapshot": {
+        "id": "m_gt532",
+        "name": "ГТ532",
+        "model": "ГТ532",
+        "serialNumber": "",
+        "inventoryNumber": ""
+      }
+    },
+    {
+      "id": "11111111-1111-4111-8111-000000000003",
+      "revision": 2,
+      "number": "TEST-003",
+      "queuePosition": 3,
+      "bendNumber": "TEST-BEND-003",
+      "bendType": "1ГО",
+      "targetAngleDeg": 9.5,
+      "notes": "",
+      "createdAt": "2026-11-04T09:00:00Z",
+      "preparedAt": "2026-11-04T09:05:00Z",
+      "snapshotVersion": 1,
+      "pipeSnapshot": {
+        "inventoryNumber": "TEST-003",
+        "factoryNumber": "FICTIONAL-003",
+        "manufacturer": "Вымышленный завод",
+        "diameterMm": 530,
+        "wallThicknessMm": 8,
+        "lengthMm": 12000,
+        "massKg": 1200,
+        "strengthClass": "TEST",
+        "steelGrade": "Условная",
+        "heatNumber": "ПЛ-ДЕМО",
+        "carbonEquivalentPct": 0,
+        "pipeSpecification": "Условный документ",
+        "coatingType": "Условное покрытие",
+        "coatingSpecification": "Условный документ покрытия",
+        "testPressureMpa": 10,
+        "minOperatingTempC": 0,
+        "incomingInspectionReference": "Демонстрационный акт",
+        "allowedCategory54": "Значение из источника",
+        "allowedCategory74": "Не установлено",
+        "notes": "Вымышленные данные",
+        "attributesJson": "{\"customFields\":[{\"name\":\"Дополнительная характеристика\",\"value\":\"исходный текст\",\"unit\":\"\"}],\"original\":{\"unknown\":[0,null,\"—\"]}}",
+        "sourceId": "fictional-pipe-003",
+        "revision": 1,
+        "certificates": []
+      },
+      "configurationSnapshot": {
+        "sourceId": "fictional-configuration-001",
+        "revision": 1,
+        "name": "Вымышленная конфигурация",
+        "version": "TEST-v1",
+        "technicalCardReference": "Условная ТК — только тест",
+        "diameterMm": 530,
+        "bendType": "",
+        "targetAngle": "",
+        "minPipeLengthMm": null,
+        "parameters": [
+          {
+            "name": "Условный параметр",
+            "value": "непроизводственное значение",
+            "unit": ""
+          }
+        ],
+        "notes": ""
+      },
+      "machineSnapshot": {
+        "id": "m_gt532",
+        "name": "ГТ532",
+        "model": "ГТ532",
+        "serialNumber": "",
+        "inventoryNumber": ""
+      }
+    }
+  ]
+}

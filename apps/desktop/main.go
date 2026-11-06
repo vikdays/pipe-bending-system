@@ -47,9 +47,14 @@ func main() {
 			application.NewServiceWithOptions(authService, application.ServiceOptions{
 				MarshalError: apperror.Marshal,
 			}),
-			application.NewServiceWithOptions(&DesktopRegistryService{auth: manager, repository: registry.New(db), documents: documentStore, imports: registry.NewImportManager(db, documentStore),
+			application.NewServiceWithOptions(&DesktopRegistryService{auth: manager, repository: registry.New(db), documents: documentStore, imports: registry.NewImportManager(db, documentStore), technicalCards: registry.NewTechnicalCardManager(db, documentStore),
 				chooseFile: func(title, pattern string) (string, error) {
 					return application.Get().Dialog.OpenFile().SetTitle(title).AddFilter("Документы", pattern).PromptForSingleSelection()
+				},
+				saveFile: func(filename string) (string, error) {
+					dialog := application.Get().Dialog.SaveFile()
+					dialog.SetOptions(&application.SaveFileDialogOptions{Title: "Выгрузить задания", Filename: filename, CanCreateDirectories: true, Filters: []application.FileFilter{{DisplayName: "Пакет заданий JSON", Pattern: "*.json"}}})
+					return dialog.PromptForSingleSelection()
 				},
 				openFile: func(path string) error { return application.Get().Browser.OpenFile(path) },
 			}, application.ServiceOptions{

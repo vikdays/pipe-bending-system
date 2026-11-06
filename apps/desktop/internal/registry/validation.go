@@ -89,14 +89,34 @@ func normalizePipe(input PipeInput) (PipeInput, error) {
 }
 
 func normalizeTask(input TaskInput) (TaskInput, error) {
-	for _, field := range []*string{&input.Number, &input.PipeID, &input.BendNumber, &input.Machine} {
+	for _, field := range []*string{&input.Number, &input.PipeID, &input.BendNumber, &input.Machine, &input.MachineID, &input.ConfigurationID, &input.BendType} {
 		*field = strings.TrimSpace(*field)
-		if *field == "" || !validText(*field, 160) {
-			return input, invalid("Укажите номер задания, трубу, номер отвода и модель станка.")
+		if !validText(*field, 160) {
+			return input, invalid("Поля задания должны содержать не более 160 символов.")
 		}
 	}
+	if input.PipeID == "" || input.PipeRevision <= 0 {
+		return input, invalid("Выберите конкретную трубу из актуального трубного журнала.")
+	}
+	input.Notes = strings.TrimSpace(input.Notes)
+	if !validText(input.Notes, 4000) {
+		return input, invalid("Примечание задания должно содержать не более 4000 символов.")
+	}
+	if input.BendType != "" && input.BendType != "1ГО" && input.BendType != "2ГО" {
+		return input, invalid("Выберите тип отвода: 1ГО или 2ГО.")
+	}
+	if input.ConfigurationID == "" {
+		if input.ConfigurationRevision != 0 {
+			return input, invalid("Проверьте выбранную конфигурацию.")
+		}
+	} else if input.ConfigurationRevision <= 0 {
+		return input, invalid("Обновите список конфигураций.")
+	}
 	input.TargetAngle = strings.ReplaceAll(strings.TrimSpace(input.TargetAngle), ",", ".")
-	if input.TargetAngle == "" || len(input.TargetAngle) > 40 || strings.Trim(input.TargetAngle, "0123456789.") != "" {
+	if input.TargetAngle == "" {
+		return input, nil
+	}
+	if len(input.TargetAngle) > 40 || strings.Trim(input.TargetAngle, "0123456789.") != "" {
 		return input, invalid("Целевой угол должен быть положительным числом, например 9 или 9,5.")
 	}
 	angle, err := strconv.ParseFloat(input.TargetAngle, 64)

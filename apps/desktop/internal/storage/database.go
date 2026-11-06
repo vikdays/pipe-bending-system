@@ -79,7 +79,19 @@ func databaseURI(path string) string {
 	return (&url.URL{Scheme: "file", Path: path}).String()
 }
 
-func migrate(db *sql.DB) error {
+func migrate(db *sql.DB) (err error) {
+	// SQLite table reconstruction requires disabling FK enforcement before BEGIN.
+	// This runs before services start, on the sole connection. Validate all links
+	// inside the transaction, then restore enforcement even on rollback.
+	if _, err = db.Exec("PRAGMA foreign_keys=OFF"); err != nil {
+		return err
+	}
+	defer func() {
+		_, restoreErr := db.Exec("PRAGMA foreign_keys=ON")
+		if err == nil {
+			err = restoreErr
+		}
+	}()
 	tx, err := db.Begin()
 	if err != nil {
 		return err
@@ -89,7 +101,7 @@ func migrate(db *sql.DB) error {
 	if err = tx.QueryRow("PRAGMA user_version").Scan(&version); err != nil {
 		return err
 	}
-	files := []string{"migrations/001_auth.sql", "migrations/002_shorter_lockout.sql", "migrations/003_pipe_registry.sql", "migrations/004_registry_imports_documents.sql"}
+	files := []string{"migrations/001_auth.sql", "migrations/002_shorter_lockout.sql", "migrations/003_pipe_registry.sql", "migrations/004_registry_imports_documents.sql", "migrations/005_task_preparation.sql", "migrations/006_machines_technical_cards.sql", "migrations/007_task_exchange.sql", "migrations/008_task_export_packages.sql"}
 	if version > len(files) {
 		return fmt.Errorf("database version is newer than this application")
 	}
@@ -104,6 +116,19 @@ func migrate(db *sql.DB) error {
 		if _, err = tx.Exec(fmt.Sprintf("PRAGMA user_version = %d", index+1)); err != nil {
 			return err
 		}
+	}
+	rows, err := tx.Query("PRAGMA foreign_key_check")
+	if err != nil {
+		return err
+	}
+	broken := rows.Next()
+	readErr := rows.Err()
+	rows.Close()
+	if readErr != nil {
+		return readErr
+	}
+	if broken {
+		return fmt.Errorf("migration would leave invalid database references")
 	}
 	return tx.Commit()
 }

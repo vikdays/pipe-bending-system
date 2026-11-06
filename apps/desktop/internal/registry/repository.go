@@ -10,7 +10,7 @@ import (
 	"changeme/internal/apperror"
 )
 
-var errStorage = apperror.New(apperror.InternalError, "Не удалось выполнить операцию с трубным журналом.")
+var errStorage = apperror.New(apperror.InternalError, "Не удалось выполнить операцию с локальными данными. Повторите попытку.")
 
 type Repository struct{ db *sql.DB }
 
