@@ -1,0 +1,33 @@
+# EAS archives the Git root. Upload only mobile sources and their shared contract.
+/*
+!/package.json
+!/.gitignore
+!/apps
+/apps/*
+!/apps/mobile
+!/apps/mobile/**
+!/packages
+/packages/*
+!/packages/contracts
+/packages/contracts/*
+!/packages/contracts/tasks-v1.schema.json
+
+# These rules also cover untracked files: private data never enters the build.
+**/node_modules/**
+**/.expo/**
+**/example/**
+**/tests/**
+**/dist/**
+**/android/**
+**/ios/**
+**/.env
+**/.env.*
+**/*.jks
+**/*.keystore
+**/credentials.json
+**/*.key
+**/*.pem
+**/*.sqlite*
+**/*.db*
+**/*.apk
+**/*.aab

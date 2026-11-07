@@ -6,6 +6,8 @@
   "scripts": {
     "start": "npm run mobile:start",
     "mobile:start": "npm --prefix apps/mobile run start -- --go",
+    "mobile:test": "npm --prefix apps/mobile test",
+    "mobile:apk": "npm --prefix apps/mobile run apk:build",
     "desktop:start": "npm --prefix apps/desktop/frontend run dev",
     "desktop:build": "npm --prefix apps/desktop/frontend run build",
     "desktop:typecheck": "npm --prefix apps/desktop/frontend run typecheck",

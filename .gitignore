@@ -75,6 +75,7 @@ example
 *.exe
 *.msi
 *.keystore
+/apps/mobile/credentials.json
 
 # lint cache
 .eslintcache

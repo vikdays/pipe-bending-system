@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "pipe-bending-mobile",
+    "name": "Контроль гибки",
     "slug": "pipe-bending-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "pipebendingmobile",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "ios": {
       "icon": "./assets/expo.icon"
     },
@@ -17,7 +17,10 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "ru.kononets.pipebending.operator",
+      "versionCode": 1,
+      "allowBackup": false
     },
     "web": {
       "output": "server",
@@ -32,11 +35,28 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      "expo-sqlite",
+      "expo-image",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "updates": {
+      "enabled": false
+    },
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "c4bc355b-0b67-44b1-b337-7f9260575820"
+      }
+    },
+    "owner": "vikdays"
   }
 }
